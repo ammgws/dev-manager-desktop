@@ -52,6 +52,13 @@ ssh-keygen -p -P '{{device.passphrase}}' -N '' -f /tmp/webos_privkey_{{device.na
  -o PubkeyAcceptedKeyTypes=+ssh-rsa \
  -p {{device.port}} {{device.username}}@{{device.host}} \
  cat /var/luna/preferences/devmode_enabled)
+ 
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Unable to ssh into TV" >&2
+  exit 1
+fi
+ 
 if [ -z "$sessionToken" ]; then
   sessionToken=$(cat /tmp/webos_devmode_token_{{device.name}}.txt)
 else
